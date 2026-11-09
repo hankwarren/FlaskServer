@@ -1,0 +1,7 @@
+had to disable AirPlay on the mac. The port number for the flask app conflicted.
+
+To run the FlaskServer:
+    export FLASK_APP=FlaskServer
+    flask run
+
+Running on http://127.0.0.1:5000
