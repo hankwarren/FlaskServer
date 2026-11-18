@@ -2,14 +2,13 @@ from flask import Blueprint, flash, render_template
 from flask import redirect, url_for
 from flask_login import current_user, login_user, logout_user
 import sqlalchemy as sa
-from app import db 
+from app import app, db 
 from app.models import User
 from app.forms import LoginForm
 
-main = Blueprint('main', __name__)
 
-@main.route('/')
-@main.route('/index')
+@app.route('/')
+@app.route('/index')
 def index():
     user = {'username': 'Hank'}
 
@@ -28,11 +27,11 @@ def index():
     ]
     return render_template('index.html', title='Home', user=user, trips=trips)
 
-@main.route('/profile')
+@app.route('/profile')
 def profile():
     return render_template('profile.html')  
 
-@main.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
