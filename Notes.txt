@@ -5,3 +5,162 @@ To run the FlaskServer:
     flask run
 
 Running on http://127.0.0.1:5000
+<<<<<<< HEAD
+
+
+I have saved this conversation with Google in hopes of figuring out how to make
+my old Pis work as access points. The goal is to have robots the implement a web
+and allow devices to attach to it and control the robot.
+
+
+
+Somewhere in here I got the thing to broadcast the network name (SpeedBump8)
+I think it was toward the end where I disable some security feature that my 
+old Raspberry pi does not support.
+
+
+sudo nmcli device wifi hotspot ssid SpeedBump8 password 12345678
+[sudo] password for pi: 
+Error: Connection activation failed: 802.1X supplicant took too long to authenticate.
+pi@SpeedBump8:~ $ sudo nmcli connection modify SpeedBump8 802-11-wireless-security.pmf 1
+Error: unknown connection 'SpeedBump8'.
+pi@SpeedBump8:~ $ sudo nmcli connection modify "SpeedBump8" 802-11-wireless-security.pmf 1
+Error: unknown connection 'SpeedBump8'.
+pi@SpeedBump8:~ $ nmcli device
+DEVICE         TYPE      STATE                   CONNECTION   
+eth0           ethernet  connected               netplan-eth0 
+lo             loopback  connected (externally)  lo           
+wlan0          wifi      disconnected            --           
+p2p-dev-wlan0  wifi-p2p  disconnected            --           
+pi@SpeedBump8:~ $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.pmf 1
+pi@SpeedBump8:~ $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.key-mgmt wpa-psk
+pi@SpeedBump8:~ $ sudo pkill wpa_supplicant
+pi@SpeedBump8:~ $ sudo systemctl restart NetworkManager
+pi@SpeedBump8:~ $ sudo nmcli connection up "Hotspot"
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/3)
+pi@SpeedBump8:~ $ 
+
+
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.key-mgmt wpa-psk
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk "12345678"
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection down "Hotspot"
+Connection 'Hotspot' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/3)
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection up "Hotspot"
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/4)
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+
+Still gives me incorrect password
+
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk ""
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.passphrase "12345678"
+Error: invalid property 'passphrase': 'passphrase' not among [key-mgmt, wep-tx-keyidx, auth-alg, proto, pairwise, group, pmf, leap-username, wep-key0, wep-key1, wep-key2, wep-key3, wep-key-flags, wep-key-type, psk, psk-flags, leap-password, leap-password-flags, wps-method, fils].
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk-flags 0
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk "12345678"
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection down "Hotspot"
+Connection 'Hotspot' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/4)
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection up "Hotspot"
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/5)
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+
+Still gives incorrect password
+
+
+
+
+
+Force Pure WPA2 and IPv4 Shared Mode
+
+
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk ""
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.passphrase "12345678"
+Error: invalid property 'passphrase': 'passphrase' not among [key-mgmt, wep-tx-keyidx, auth-alg, proto, pairwise, group, pmf, leap-username, wep-key0, wep-key1, wep-key2, wep-key3, wep-key-flags, wep-key-type, psk, psk-flags, leap-password, leap-password-flags, wps-method, fils].
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk-flags 0
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk "12345678"
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection down "Hotspot"
+Connection 'Hotspot' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/4)
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection up "Hotspot"
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/5)
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.key-mgmt wpa-psk
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" ipv4.method shared ipv6.method ignore
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.psk-flags 0
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection down "Hotspot"
+Connection 'Hotspot' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/5)
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli radio wifi off
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sleep 2
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli radio wifi on
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sleep 2
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo systemctl restart wpa_supplicant
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo systemctl restart NetworkManager
+
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo nmcli connection up "Hotspot"
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/3)
+
+
+
+
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ sudo journalctl -n 30 -u NetworkManager -u wpa_supplicant --no-pager
+Nov 09 14:05:59 SpeedBump8 NetworkManager[1739]: <info>  [1794261959.8014] Config: added 'key_mgmt' value 'WPA-PSK WPA-PSK-SHA256'
+Nov 09 14:05:59 SpeedBump8 NetworkManager[1739]: <info>  [1794261959.8014] Config: added 'psk' value '<hidden>'
+Nov 09 14:05:59 SpeedBump8 NetworkManager[1739]: <info>  [1794261959.8015] Config: added 'proto' value 'RSN'
+Nov 09 14:05:59 SpeedBump8 NetworkManager[1739]: <info>  [1794261959.8015] Config: added 'pairwise' value 'CCMP'
+Nov 09 14:05:59 SpeedBump8 NetworkManager[1739]: <info>  [1794261959.8015] Config: added 'group' value 'CCMP'
+Nov 09 14:05:59 SpeedBump8 NetworkManager[1739]: <info>  [1794261959.8016] Config: added 'ieee80211w' value '0'
+Nov 09 14:05:59 SpeedBump8 wpa_supplicant[1723]: Note: nl80211 driver interface is not designed to be used with ap_scan=2; this can result in connection failures
+Nov 09 14:06:00 SpeedBump8 wpa_supplicant[1723]: wlan0: interface state UNINITIALIZED->ENABLED
+Nov 09 14:06:00 SpeedBump8 wpa_supplicant[1723]: wlan0: AP-ENABLED
+Nov 09 14:06:00 SpeedBump8 wpa_supplicant[1723]: wlan0: CTRL-EVENT-CONNECTED - Connection to b8:27:eb:05:73:f7 completed [id=0 id_str=]
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.0327] device (wlan0): supplicant interface state: disconnected -> completed
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.0328] device (wlan0): Activation: (wifi) Stage 2 of 5 (Device Configure) successful. Started Wi-Fi Hotspot "SpeedBump8"
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.0329] device (p2p-dev-wlan0): supplicant management interface state: disconnected -> completed
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.0335] device (wlan0): state change: config -> ip-config (reason 'none', managed-type: 'full')
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.2845] dnsmasq-manager: starting dnsmasq...
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.2911] device (wlan0): state change: ip-config -> ip-check (reason 'none', managed-type: 'full')
+Nov 09 14:06:00 SpeedBump8 dnsmasq[2074]: started, version 2.91 cachesize 150
+Nov 09 14:06:00 SpeedBump8 dnsmasq[2074]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov 09 14:06:00 SpeedBump8 dnsmasq[2074]: chown of PID file /run/nm-dnsmasq-wlan0.pid failed: please add capability CAP_CHOWN
+Nov 09 14:06:00 SpeedBump8 dnsmasq-dhcp[2074]: DHCP, IP range 10.42.0.10 -- 10.42.0.254, lease time 1h
+Nov 09 14:06:00 SpeedBump8 dnsmasq[2074]: reading /etc/resolv.conf
+Nov 09 14:06:00 SpeedBump8 dnsmasq[2074]: using nameserver 192.168.2.1#53
+Nov 09 14:06:00 SpeedBump8 dnsmasq[2074]: cleared cache
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.3913] device (wlan0): state change: ip-check -> secondaries (reason 'none', managed-type: 'full')
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.3921] device (wlan0): state change: secondaries -> activated (reason 'none', managed-type: 'full')
+Nov 09 14:06:00 SpeedBump8 NetworkManager[1739]: <info>  [1794261960.4003] device (wlan0): Activation: successful, device activated.
+Nov 09 14:14:46 SpeedBump8 wpa_supplicant[1723]: wlan0: CTRL-EVENT-SUBNET-STATUS-UPDATE status=0
+Nov 09 14:14:50 SpeedBump8 wpa_supplicant[1723]: wlan0: CTRL-EVENT-SUBNET-STATUS-UPDATE status=0
+Nov 09 14:16:20 SpeedBump8 wpa_supplicant[1723]: wlan0: CTRL-EVENT-SUBNET-STATUS-UPDATE status=0
+Nov 09 14:17:23 SpeedBump8 wpa_supplicant[1723]: wlan0: CTRL-EVENT-SUBNET-STATUS-UPDATE status=0
+pi@SpeedBump8:/etc/NetworkManager/system-connections $ 
+
+remove iwd attempt and try forcing non-hybrid protocol
+
+pi@SpeedBump8:/etc/NetworkManager $ sudo sed -i '/wifi.backend=iwd/d' /etc/NetworkManager/NetworkManager.conf
+[sudo] password for pi: 
+pi@SpeedBump8:/etc/NetworkManager $ 
+pi@SpeedBump8:/etc/NetworkManager $ sudo systemctl unmask wpa_supplicant
+Removed '/etc/systemd/system/wpa_supplicant.service'.
+pi@SpeedBump8:/etc/NetworkManager $ sudo systemctl restart wpa_supplicant
+pi@SpeedBump8:/etc/NetworkManager $ sudo systemctl restart NetworkManager
+pi@SpeedBump8:/etc/NetworkManager $ 
+pi@SpeedBump8:/etc/NetworkManager $ 
+pi@SpeedBump8:/etc/NetworkManager $ 
+pi@SpeedBump8:/etc/NetworkManager $ sudo nmcli connection delete "Hotspot"
+Connection 'Hotspot' (2f148117-5385-4d61-973d-9dde040309d5) successfully deleted.
+pi@SpeedBump8:/etc/NetworkManager $ sudo nmcli device wifi hotspot ssid "SpeedBump8" password "12345678"
+Error: Connection activation failed: 802.1X supplicant took too long to authenticate.
+pi@SpeedBump8:/etc/NetworkManager $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.key-mgmt wpa-psk
+pi@SpeedBump8:/etc/NetworkManager $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.proto rsn 802-11-wireless-security.pairwise ccmp 802-11-wireless-security.group ccmp
+pi@SpeedBump8:/etc/NetworkManager $ sudo nmcli connection modify "Hotspot" 802-11-wireless-security.pmf 1
+pi@SpeedBump8:/etc/NetworkManager $ sudo nmcli connection down "Hotspot"
+Error: 'Hotspot' is not an active connection.
+Error: no active connection provided.
+pi@SpeedBump8:/etc/NetworkManager $ sudo nmcli connection up "Hotspot"
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/4)
+'jkkkkj1' is not recognized as an internal or external command,
+operable program or batch file.
+=======
+>>>>>>> 0d8fbc5112196668ad0c37d76800f9150abc8705
