@@ -6,6 +6,8 @@ import sqlalchemy.orm as so
 from flask_login import UserMixin
 from app import db
 from app import login
+from hashlib import md5
+
 
 @login.user_loader
 def load_user(id):
@@ -26,6 +28,12 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
+
+
 
 class Trip(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
